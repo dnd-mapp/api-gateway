@@ -24,6 +24,7 @@ RUN pnpm prisma:generate && \
 FROM --platform=$BUILDPLATFORM base AS package
 
 ENV NODE_ENV="production"
+ENV HOST="0.0.0.0"
 
 COPY --from=build /app/dist/api-gateway .
 
