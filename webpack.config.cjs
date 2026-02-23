@@ -14,6 +14,7 @@ module.exports = function (configuration) {
     delete packageManifest.devDependencies;
     delete packageManifest.scripts;
     delete packageManifest.packageManager;
+    delete packageManifest.type;
 
     return {
         ...configuration,
