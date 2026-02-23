@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="prisma:migrate-dev" type="js.build_tools.npm" folderName="Prisma" nameIsGenerated="true">
+  <configuration default="false" name="docker:compose:down" type="js.build_tools.npm" folderName="Docker" nameIsGenerated="true">
     <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>
-      <script value="prisma:migrate-dev" />
+      <script value="docker:compose:down" />
     </scripts>
     <node-interpreter value="project" />
     <envs />

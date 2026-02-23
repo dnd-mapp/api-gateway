@@ -19,6 +19,8 @@ node_modules/
 .env*
 !.env.template
 *.pem
+.docker/mariadb/data/
+.docker/mariadb/root-password.txt
 
 # System files
 .DS_Store

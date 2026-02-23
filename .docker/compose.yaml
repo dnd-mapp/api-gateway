@@ -1,0 +1,35 @@
+name: dnd-mapp
+services:
+    api-gateway:
+        image: dnd-mapp/api-gateway:latest
+        container_name: api-gateway
+        restart: unless-stopped
+        depends_on:
+            mariadb-server:
+                condition: service_healthy
+        env_file:
+            - ../.env
+        ports:
+            - '4450:4450/tcp'
+
+    mariadb-server:
+        image: mariadb:latest
+        container_name: mariadb
+        restart: unless-stopped
+        healthcheck:
+            test: ['CMD', 'healthcheck.sh', '--connect', '--innodb_initialized']
+            start_period: 10s
+            interval: 10s
+            timeout: 5s
+            retries: 3
+        ports:
+            - '3306:3306/tcp'
+        environment:
+            MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
+        volumes:
+            - ./mariadb/data:/var/lib/mysql
+        secrets:
+            - mariadb_root_password
+secrets:
+    mariadb_root_password:
+        file: ./mariadb/root-password.txt
