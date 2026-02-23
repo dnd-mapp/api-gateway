@@ -17,6 +17,8 @@ async function main() {
     const host = process.env['HOST'] ?? 'localhost';
     const port = parseNumber(3000, process.env['PORT']);
 
+    app.enableShutdownHooks();
+
     await app.listen(port, host);
 }
 
