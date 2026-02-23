@@ -1,6 +1,6 @@
 {
   "name": "@dnd-mapp/api-gateway",
-  "description": "",
+  "description": "High-performance NestJS/Fastify REST API serving as the source of truth for 5th Edition TTRPG data, featuring SRD-compliant content, strict Prisma-based data integrity, and a decoupled architecture.",
   "version": "0.0.0",
   "private": true,
   "license": "UNLICENSED",
