@@ -19,11 +19,15 @@ While built as a foundational component for the **D&D Mapp** platform, this serv
 - **Framework:** [NestJS](https://nestjs.com/) with the [Fastify](https://www.fastify.io/) adapter for high-throughput, low-latency request handling.
 - **Database:** [MariaDB](https://mariadb.org/) for robust relational data storage.
 - **ORM:** [Prisma](https://www.prisma.io/) to ensure end-to-end type safety and efficient schema management.
+- **Validation & Transformation:**
+    - [class-validator](https://github.com/typestack/class-validator) for declarative, decorator-based validation of DTOs and environment variables.
+    - [class-transformer](https://github.com/typestack/class-transformer) for proper casting and serialization of plain objects into class instances.
 - **API Pattern:** RESTful architecture featuring built-in Pagination, Filtering (e.g., by Challenge Rating, Spell Level), and Sorting.
 
 ## Key Features
 
 - **SRD-Compliant Data:** A curated library of 5th Edition content, strictly adhering to the System Reference Document (SRD) for public consumption.
+- **Strict Data Integrity:** Uses `class-validator` and `class-transformer` to enforce strict validation rules on all incoming Request Bodies, Query Parameters, and even the system's own Environment Variables at startup.
 - **Administrative Data Management:** Includes a protected administrative layer for data entry and curation, allowing for seamless updates via a dedicated portal.
 - **Decoupled Architecture:** By excluding player-specific data (characters, inventories, maps), the API remains a focused, highly cacheable reference engine.
 - **Schema-First Design:** Leveraging Prisma and NestJS to provide a strictly typed contract, ensuring that complex game mechanics are represented with high data integrity.
@@ -92,11 +96,14 @@ pnpm gen:ssl-cert
 
 #### A. Configure Environment Variables
 
-Copy the template and adjust credentials if necessary. Ensure `SSL_KEY_PATH` and `SSL_CERT_PATH` match your generated certificates.
+Copy the template and adjust credentials if necessary.
 
 ```bash
 cp .env.template .env
 ```
+
+> [!IMPORTANT]
+> This application performs **Environment Validation** on startup. If required variables are missing or have invalid formats (e.g., an invalid URL or a string where a number is expected), the application will log a validation error and fail to start. This is powered by `class-validator`.
 
 #### B. Start the Database
 
@@ -187,7 +194,7 @@ docker run -p 4450:4450 --env-file .env dnd-mapp/api-gateway
 
 ## Configuration
 
-The application is configured via environment variables in the `.env` file.
+The application is strictly configured via environment variables. Every variable is validated using `class-validator` decorators to ensure the runtime environment meets all safety requirements.
 
 | Variable        | Description                       | Requirement    | Default                     |
 |-----------------|-----------------------------------|----------------|-----------------------------|
@@ -203,21 +210,19 @@ The application is configured via environment variables in the `.env` file.
 | `PORT`          | The port the gateway listens on   | Optional       | `4450`                      |
 | `CORS_ORIGINS`  | Comma-separated allowed origins   | Optional       | `*`                         |
 
-### CORS Configuration
-
-When defining multiple origins, use a comma-separated string without spaces:
-
-```bash
-CORS_ORIGINS=https://localhost.auth.dndmapp.dev:4300,https://localhost.www.dndmapp.dev:4200
-```
-
 ---
 
-## Usage
+## Usage & Validation
 
-The API Gateway provides a predictable REST interface. Most endpoints support `limit`, `offset`, and `sort` query parameters.
+The API Gateway provides a predictable REST interface. All endpoints use **Global Validation Pipes** to sanitize and validate input.
+
+### Request Validation
+
+Incoming requests (Body, Query, and Params) are transformed into typed DTOs. If a request fails validation (e.g., passing a string for an integer `limit`), the API will automatically respond with a `400 Bad Request` and a detailed error payload.
 
 ### Example: Fetching Spells
+
+`class-transformer` handles the conversion of query string numbers into actual TypeScript `number` types.
 
 ```http
 GET /v1/spells?level=3&school=Evocation&limit=10
