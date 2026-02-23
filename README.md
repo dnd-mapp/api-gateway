@@ -128,8 +128,38 @@ We recommend using **[Mise-en-place (mise)](https://mise.jdx.dev/)** to manage r
 9. **Run the application:**
 
    ```bash
-   pnpm run start
+   pnpm start
    ```
+
+## Available Scripts
+
+The project uses `pnpm` as its package manager. Below is a breakdown of the available scripts defined in `package.json`:
+
+### Development & Build
+
+- `pnpm gen:ssl-cert`: Generates local SSL certificates using `mkcert` for `localhost.api.dndmapp.dev`.
+- `pnpm build`: Compiles the NestJS application into the `dist` folder.
+- `pnpm start`: Launches the application in production mode.
+
+### Database & ORM (Prisma)
+
+- `pnpm prisma:migrate-dev`: Runs migrations in development mode (creates new migrations if changes are detected).
+- `pnpm prisma:migrate-deploy`: Applies pending migrations to the database (used in CI/CD or production).
+- `pnpm prisma:migrate-reset`: Resets the database and reapplies all migrations from scratch.
+- `pnpm prisma:seed`: Populates the database with initial SRD data.
+- `pnpm prisma:generate`: Generates the Prisma Client based on the current schema.
+
+### Docker Operations
+
+- `pnpm docker:build`: Builds the production Docker image for the API Gateway.
+- `pnpm docker:compose:up`: Starts the infrastructure (MariaDB and API) in detached mode using Docker Compose.
+- `pnpm docker:compose:down`: Stops and removes the containers defined in the Docker Compose file.
+
+### Code Quality
+
+- `pnpm lint`: Runs ESLint to check for code quality and style issues.
+- `pnpm format:check`: Checks if the codebase follows the Prettier formatting rules.
+- `pnpm format:write`: Automatically fixes formatting issues using Prettier and organizes imports.
 
 ## Local DNS Configuration
 
@@ -159,9 +189,6 @@ The project includes a `.docker/compose.yaml` file to simplify local development
 - **mariadb-server**: A MariaDB instance using secrets for the root password and volume mapping for persistence.
 - **api-gateway**: The NestJS application itself.
 
-> [!IMPORTANT]
-> **Manual Database Setup Required**: The MariaDB container initializes with a root password, but it does **not** automatically create the application user or the required databases. You must create these manually before running migrations (see [Database Setup](#database-setup)).
-
 ### Management Commands
 
 - **Start all services**: `pnpm docker:compose:up`
@@ -169,41 +196,22 @@ The project includes a `.docker/compose.yaml` file to simplify local development
 
 ## Database Setup
 
-1. **Configure Environment**:
+1. **Run Migrations**:
 
-   Copy the environment template and configure your database credentials:
+   Prisma requires two databases to handle migrations safely: the main database (`DB_NAME`) and a **Shadow Database**. These are now automatically created by the MariaDB container on startup.
 
-   ```bash
-   cp .env.template .env
-   ```
-
-2. **Create Databases and User**:
-
-   Prisma requires two databases to handle migrations safely in a development environment: the main database (`DB_NAME`) and a **Shadow Database**. Connect to your MariaDB instance (e.g., via `docker exec` or a GUI like DBeaver) and run:
-
-   ```sql
-   -- Create the main and shadow databases
-   CREATE DATABASE IF NOT EXISTS dma_api_dev;
-   CREATE DATABASE IF NOT EXISTS dma_api_dev_shadow;
-
-   -- Create the user and grant privileges
-   CREATE USER 'user'@'%' IDENTIFIED BY 'pass';
-   
-   GRANT ALL PRIVILEGES ON dma_api_dev.* TO 'user'@'%';
-   GRANT ALL PRIVILEGES ON dma_api_dev_shadow.* TO 'user'@'%';
-   
-   FLUSH PRIVILEGES;
-   ```
-
-3. **Run Migrations**:
-
-   Initialize the schema:
+   To sync your Prisma schema with the database, run:
 
    ```bash
    pnpm prisma:migrate-dev
    ```
 
-4. **Seed the Database**:
+   > [!NOTE] **Why a Shadow Database?**  
+   > Prisma uses a temporary "Shadow Database" during development to detect schema drift and generate new migrations accurately without affecting your primary development data. It is essentially a staging area where Prisma can safely reset and recalculate the state of your schema.
+   >
+   > For more technical details, refer to the [Prisma Shadow Database documentation](https://www.prisma.io/docs/orm/prisma-migrate/understanding-prisma-migrate/shadow-database).
+
+2. **Seed the Database**:
 
    Populate your local database with core SRD data:
 
@@ -233,21 +241,21 @@ docker run -p 4450:4450 --env-file .env dnd-mapp/api-gateway
 
 ## Configuration
 
-The application is configured via environment variables. Key variables include:
+The application is configured via environment variables. For local development, ensure you have generated your SSL certificates before starting the service.
 
-| Variable        | Description                       | Default                     |
-|-----------------|-----------------------------------|-----------------------------|
-| `DB_HOST`       | MariaDB host address              | `localhost`                 |
-| `DB_PORT`       | MariaDB port                      | `3306`                      |
-| `DB_USER`       | Database username                 | `user`                      |
-| `DB_PASS`       | Database password                 | `pass`                      |
-| `DB_NAME`       | Database/Schema name              | `dma_api_dev`               |
-| `DATABASE_URL`  | Interpolated connection string    | (Constructed from above)    |
-| `HOST`          | The hostname the gateway binds to | `localhost.api.dndmapp.dev` |
-| `PORT`          | The port the gateway listens on   | `4450`                      |
-| `SSL_KEY_PATH`  | Path to the private key           | `./ssl-key.pem`             |
-| `SSL_CERT_PATH` | Path to the certificate           | `./ssl-cert.pem`            |
-| `CORS_ORIGINS`  | Comma-separated allowed origins   | `*`                         |
+| Variable        | Description                       | Requirement    | Default                     |
+|-----------------|-----------------------------------|----------------|-----------------------------|
+| `DB_PASS`       | Database password                 | Required       | `pass`                      |
+| `DB_NAME`       | Database/Schema name              | Required       | `dma_api_dev`               |
+| `SSL_KEY_PATH`  | Path to the private key           | Required       | `./ssl-key.pem`             |
+| `SSL_CERT_PATH` | Path to the certificate           | Required       | `./ssl-cert.pem`            |
+| `DB_PORT`       | MariaDB port                      | Optional       | `3306`                      |
+| `DB_HOST`       | MariaDB host address              | Optional       | `localhost`                 |
+| `DB_USER`       | Database username                 | Optional       | `root`                      |
+| `DATABASE_URL`  | Interpolated connection string    | Auto-generated | (Constructed)               |
+| `HOST`          | The hostname the gateway binds to | Optional       | `localhost.api.dndmapp.dev` |
+| `PORT`          | The port the gateway listens on   | Optional       | `4450`                      |
+| `CORS_ORIGINS`  | Comma-separated allowed origins   | Optional       | `*`                         |
 
 ### CORS Configuration
 
