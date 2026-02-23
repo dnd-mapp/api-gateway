@@ -1,5 +1,5 @@
 {
-  "name": "api-gateway",
+  "name": "@dnd-mapp/api-gateway",
   "description": "",
   "version": "0.0.0",
   "private": true,
