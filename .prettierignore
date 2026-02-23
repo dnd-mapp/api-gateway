@@ -10,6 +10,7 @@
 !*.js
 !*.cjs
 !*.mjs
+!*.sh
 
 !.prettierrc
 
@@ -24,6 +25,7 @@
 !.vscode/mcp.json
 
 dist/
+generated/prisma/
 
 node_modules/
 
