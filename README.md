@@ -28,6 +28,8 @@ Building a digital tabletop experience requires low latency and high reliability
 
 ### Prerequisites
 
+This project uses a `.tool-versions` file to manage runtime and package manager versions. We recommend using [mise-en-place (mise)](https://mise.jdx.dev/) to ensure your environment matches the project requirements.
+
 - **Node.js**: v24
 - **pnpm**: v10
 
@@ -40,7 +42,14 @@ Building a digital tabletop experience requires low latency and high reliability
    cd api-gateway
    ```
 
-2. Install dependencies:
+2. Install and trust the required tool versions (if using `mise`):
+
+   ```bash
+   # If you have mise set to trust the directory the tools will be automatically available.
+   mise install
+   ```
+
+3. Install dependencies:
 
    ```bash
    pnpm install
