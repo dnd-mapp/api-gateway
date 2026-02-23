@@ -39,6 +39,7 @@
     "@types/node": "~24.10",
     "eslint": "~10.0",
     "eslint-config-prettier": "~10.1",
+    "generate-package-json-webpack-plugin": "~2.6",
     "globals": "~17.3",
     "prettier": "~3.8",
     "prettier-plugin-organize-imports": "~4.3",
@@ -48,6 +49,8 @@
     "ts-node": "~10.9",
     "tsconfig-paths": "~4.2",
     "typescript": "~5.9",
-    "typescript-eslint": "~8.56"
+    "typescript-eslint": "~8.56",
+    "webpack": "~5.105",
+    "webpack-node-externals": "~3.0"
   }
 }
