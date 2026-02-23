@@ -28,147 +28,47 @@ While built as a foundational component for the **D&D Mapp** platform, this serv
 - **Decoupled Architecture:** By excluding player-specific data (characters, inventories, maps), the API remains a focused, highly cacheable reference engine.
 - **Schema-First Design:** Leveraging Prisma and NestJS to provide a strictly typed contract, ensuring that complex game mechanics are represented with high data integrity.
 
-## Documentation
-
-The API Gateway is fully documented using **Swagger (OpenAPI 3.0)**.
-
-When the application is running in `development` mode, you can access the interactive UI at: **`https://localhost.api.dndmapp.dev:4450/docs`**
-
-This documentation provides:
-
-- Detailed schema definitions for all SRD entities.
-- Interactive request testing (Try it out!).
-- Authentication requirements for administrative endpoints.
-- Response examples and error code definitions.
+---
 
 ## Getting Started
 
-### Prerequisites
+Follow these steps to set up your local development environment.
 
-We recommend using **[Mise-en-place (mise)](https://mise.jdx.dev/)** to manage runtimes and package managers. This project includes a `.tool-versions` file to ensure development environment consistency.
+### 1. Prerequisites
+
+We recommend using **[Mise-en-place (mise)](https://mise.jdx.dev/)** to manage runtimes and package managers. This project includes a `.tool-versions` file to ensure consistency.
 
 - **Mise**: To handle Node.js and pnpm versions automatically.
 - **Database**: MariaDB 10.11+
-- **Docker**: For containerized development
-- **mkcert**: For local TLS/SSL development (Optional but recommended)
+- **Docker**: For containerized development infrastructure.
+- **mkcert**: For local TLS/SSL development (Optional but recommended).
 
-### Installation
+### 2. Installation & Runtime Setup
 
-1. **Clone the repository:**
+Clone the repository and prepare your environment:
 
-   ```bash
-   git clone https://github.com/dnd-mapp/api-gateway.git
-   cd api-gateway
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/dnd-mapp/api-gateway.git
+cd api-gateway
 
-2. **Setup Runtimes (via Mise):**
+# Install correct Node.js and pnpm versions (via Mise)
+mise install
 
-   If you have Mise installed, run the following to install the correct Node.js and pnpm versions:
+# Install dependencies
+pnpm install
+```
 
-   ```bash
-   mise install
-   ```
+### 3. Local Networking & Security
 
-3. **Install dependencies:**
+The gateway is configured to run on a custom local domain with HTTPS.
 
-   ```bash
-   pnpm install
-   ```
+#### A. Configure Local DNS
 
-4. **Configure Local DNS:**
+Update your system's hosts file to map the development domain to your local machine.
 
-   Map the development domain to your local machine. See [Local DNS Configuration](#local-dns-configuration) for details.
-
-5. **Generate Local SSL Certificates:**
-
-   To use HTTPS locally with `Fastify`, use `mkcert` to generate a self-signed certificate:
-
-   ```bash
-   # Install the CA to your trust store (once per machine)
-   mkcert -install
-
-   # Generate certificates for the local development domain
-   pnpm gen:ssl-cert
-   ```
-
-6. **Start Database Infrastructure:**
-
-   If you don't have a local MariaDB instance running, use the provided Docker Compose configuration to start one:
-
-   ```bash
-   docker compose -f .docker/compose.yaml up -d
-   ```
-   *This will start MariaDB with a health check. The API Gateway container is defined but will wait for the database to be healthy.*
-
-7. **Database Setup:**
-
-   Copy the environment template and configure your database credentials:
-
-   ```bash
-   cp .env.template .env
-   ```
-
-   Run the Prisma migrations to initialize the schema:
-
-   ```bash
-   pnpm prisma:migrate-reset
-   
-   # Or alternatively
-   pnpm prisma:migrate-dev
-   ```
-
-8. **Seed the Database:**
-
-   Populate your local database with core SRD data:
-
-   ```bash
-   pnpm prisma:seed
-   ```
-
-9. **Run the application:**
-
-   ```bash
-   pnpm start
-   ```
-
-## Available Scripts
-
-The project uses `pnpm` as its package manager. Below is a breakdown of the available scripts defined in `package.json`:
-
-### Development & Build
-
-- `pnpm gen:ssl-cert`: Generates local SSL certificates using `mkcert` for `localhost.api.dndmapp.dev`.
-- `pnpm build`: Compiles the NestJS application into the `dist` folder.
-- `pnpm start`: Launches the application in production mode.
-
-### Database & ORM (Prisma)
-
-- `pnpm prisma:migrate-dev`: Runs migrations in development mode (creates new migrations if changes are detected).
-- `pnpm prisma:migrate-deploy`: Applies pending migrations to the database (used in CI/CD or production).
-- `pnpm prisma:migrate-reset`: Resets the database and reapplies all migrations from scratch.
-- `pnpm prisma:seed`: Populates the database with initial SRD data.
-- `pnpm prisma:generate`: Generates the Prisma Client based on the current schema.
-
-### Docker Operations
-
-- `pnpm docker:build`: Builds the production Docker image for the API Gateway.
-- `pnpm docker:compose:up`: Starts the infrastructure (MariaDB and API) in detached mode using Docker Compose.
-- `pnpm docker:compose:down`: Stops and removes the containers defined in the Docker Compose file.
-
-### Code Quality
-
-- `pnpm lint`: Runs ESLint to check for code quality and style issues.
-- `pnpm format:check`: Checks if the codebase follows the Prettier formatting rules.
-- `pnpm format:write`: Automatically fixes formatting issues using Prettier and organizes imports.
-
-## Local DNS Configuration
-
-To serve the API on `localhost.api.dndmapp.dev` during local development, you must update your system's hosts file.
-
-### Edit your hosts file
-
-**Windows (Run as Administrator):** `C:\Windows\System32\drivers\etc\hosts`  
-**macOS / Linux:** `/etc/hosts`
+- **Windows (Admin):** `C:\Windows\System32\drivers\etc\hosts`
+- **macOS / Linux:** `/etc/hosts`
 
 Add the following line:
 
@@ -176,59 +76,103 @@ Add the following line:
 127.0.0.1  localhost.api.dndmapp.dev
 ```
 
-## Local HTTPS Setup
+#### B. Generate Local SSL Certificates
 
-To enable HTTPS in the NestJS application (Fastify adapter), ensure your `.env` points to the correct paths. See the environment variables configuration below for more info.
+Use `mkcert` to generate a self-signed certificate for the local domain:
 
-## Docker Infrastructure
+```bash
+# Install the CA to your trust store (once per machine)
+mkcert -install
 
-The project includes a `.docker/compose.yaml` file to simplify local development.
+# Generate certificates for the local development domain
+pnpm gen:ssl-cert
+```
 
-### Services
+### 4. Infrastructure & Environment
 
-- **mariadb-server**: A MariaDB instance using secrets for the root password and volume mapping for persistence.
-- **api-gateway**: The NestJS application itself.
+#### A. Configure Environment Variables
 
-### Management Commands
+Copy the template and adjust credentials if necessary. Ensure `SSL_KEY_PATH` and `SSL_CERT_PATH` match your generated certificates.
 
-- **Start all services**: `pnpm docker:compose:up`
-- **Stop all services**: `pnpm docker:compose:down`
+```bash
+cp .env.template .env
+```
 
-## Database Setup
+#### B. Start the Database
 
-1. **Run Migrations**:
+Use the provided Docker Compose configuration to start a MariaDB instance. This container includes health checks and automatically prepares the required databases.
 
-   Prisma requires two databases to handle migrations safely: the main database (`DB_NAME`) and a **Shadow Database**. These are now automatically created by the MariaDB container on startup.
+```bash
+docker compose -f .docker/compose.yaml up -d
+```
 
-   To sync your Prisma schema with the database, run:
+### 5. Database Initialization
 
-   ```bash
-   pnpm prisma:migrate-dev
-   ```
+Synchronize the Prisma schema and populate the database with SRD content.
 
-   > [!NOTE] **Why a Shadow Database?**  
-   > Prisma uses a temporary "Shadow Database" during development to detect schema drift and generate new migrations accurately without affecting your primary development data. It is essentially a staging area where Prisma can safely reset and recalculate the state of your schema.
-   >
-   > For more technical details, refer to the [Prisma Shadow Database documentation](https://www.prisma.io/docs/orm/prisma-migrate/understanding-prisma-migrate/shadow-database).
+> [!NOTE] **Why a Shadow Database?**  
+> Prisma uses a temporary "Shadow Database" during development to detect schema drift and generate migrations without affecting your primary data. This is handled automatically by the MariaDB container. [Learn more](https://www.prisma.io/docs/orm/prisma-migrate/understanding-prisma-migrate/shadow-database).
 
-2. **Seed the Database**:
+```bash
+# Run migrations to initialize the schema
+pnpm prisma:migrate-dev
 
-   Populate your local database with core SRD data:
+# Seed the database with core SRD data
+pnpm prisma:seed
+```
 
-   ```bash
-   pnpm prisma:seed
-   ```
+### 6. Launch the Application
+
+Start the NestJS application in development mode:
+
+```bash
+pnpm start
+```
+
+Once running, the interactive **Swagger (OpenAPI 3.0)** documentation is available at: [https://localhost.api.dndmapp.dev:4450/docs](https://localhost.api.dndmapp.dev:4450/docs)
+
+---
+
+## Available Scripts
+
+The following scripts are available via `pnpm`:
+
+### Development & Build
+
+- `pnpm gen:ssl-cert`: Generates local SSL certificates.
+- `pnpm build`: Compiles the application into the `dist` folder.
+- `pnpm start`: Launches the application.
+
+### Database & ORM (Prisma)
+
+- `pnpm prisma:migrate-dev`: Runs migrations in development mode.
+- `pnpm prisma:migrate-deploy`: Applies pending migrations (CI/CD/Prod).
+- `pnpm prisma:migrate-reset`: Resets the database and reapplies all migrations.
+- `pnpm prisma:seed`: Populates the database with initial SRD data.
+- `pnpm prisma:generate`: Generates the Prisma Client.
+
+### Docker Operations
+
+- `pnpm docker:build`: Builds the production Docker image.
+- `pnpm docker:compose:up`: Starts MariaDB and the API in detached mode.
+- `pnpm docker:compose:down`: Stops and removes the Docker containers.
+
+### Code Quality
+
+- `pnpm lint`: Runs ESLint check.
+- `pnpm format:check`: Checks formatting via Prettier.
+- `pnpm format:write`: Automatically fixes formatting and organizes imports.
+
+---
 
 ## Docker Support
-
-A Dockerfile is provided for containerized deployment, located at `.docker/Dockerfile`.
 
 ### Building the Image
 
 To build the Docker image locally:
 
 ```bash
-docker build -t dnd-mapp/api-gateway -f .docker/Dockerfile .
+pnpm docker:build
 ```
 
 ### Running the Container
@@ -239,9 +183,11 @@ Ensure you pass the required environment variables:
 docker run -p 4450:4450 --env-file .env dnd-mapp/api-gateway
 ```
 
+---
+
 ## Configuration
 
-The application is configured via environment variables. For local development, ensure you have generated your SSL certificates before starting the service.
+The application is configured via environment variables in the `.env` file.
 
 | Variable        | Description                       | Requirement    | Default                     |
 |-----------------|-----------------------------------|----------------|-----------------------------|
@@ -259,11 +205,13 @@ The application is configured via environment variables. For local development, 
 
 ### CORS Configuration
 
-When defining multiple origins in your `.env` file, use a comma-separated string without spaces:
+When defining multiple origins, use a comma-separated string without spaces:
 
 ```bash
 CORS_ORIGINS=https://localhost.auth.dndmapp.dev:4300,https://localhost.www.dndmapp.dev:4200
 ```
+
+---
 
 ## Usage
 
@@ -281,16 +229,18 @@ GET /v1/spells?level=3&school=Evocation&limit=10
 GET /v1/creatures/ancient-red-dragon
 ```
 
+---
+
 ## Contributing
 
-We welcome contributions to the D&D Mapp ecosystem! For detailed instructions on our development workflow, coding standards, and how to submit pull requests, please refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) file.
+We welcome contributions! For detailed instructions on workflow, standards, and pull requests, please refer to [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 
-This project is currently **unlicensed**. All rights are reserved. For more information, please see the [LICENSE](./LICENSE) file.
+This project is currently **unlicensed**. All rights are reserved. See the [LICENSE](./LICENSE) file for more information.
 
 > [!Note]
-> This project provides data covered under the Open Game License (OGL) v1.0a. Please refer to the `OGL.md` file in the root directory for specific attribution and compliance details.*
+> This project provides data covered under the Open Game License (OGL) v1.0a. Please refer to the `OGL.md` file in the root directory for specific attribution and compliance details.
 
 ## Contact / Support
 
