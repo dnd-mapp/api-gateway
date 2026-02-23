@@ -26,10 +26,15 @@ services:
             - '3306:3306/tcp'
         environment:
             MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
+            MARIADB_PASWORD_FILE: /run/secrets/mariadb_user_password
         volumes:
             - ./mariadb/data:/var/lib/mysql
+            - ./mariadb/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh:ro
         secrets:
             - mariadb_root_password
+            - mariadb_user_password
 secrets:
     mariadb_root_password:
         file: ./mariadb/root-password.txt
+    mariadb_user_password:
+        file: ./mariadb/user-password.txt

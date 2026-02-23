@@ -18,5 +18,5 @@ trim_trailing_whitespace = false
 [package.json]
 indent_size = 2
 
-[.docker/mariadb/root-password*]
+[.docker/mariadb/*-password*]
 insert_final_newline = false

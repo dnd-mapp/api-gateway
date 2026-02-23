@@ -20,7 +20,7 @@ node_modules/
 !.env.template
 *.pem
 .docker/mariadb/data/
-.docker/mariadb/root-password.txt
+.docker/mariadb/*-password.txt
 
 # System files
 .DS_Store
