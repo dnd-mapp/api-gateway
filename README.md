@@ -24,6 +24,30 @@ While built as a foundational component for the **D&D Mapp** platform, this serv
     - [class-transformer](https://github.com/typestack/class-transformer) for proper casting and serialization of plain objects into class instances.
 - **API Pattern:** RESTful architecture featuring built-in Pagination, Filtering (e.g., by Challenge Rating, Spell Level), and Sorting.
 
+## Project Structure
+
+The project follows a modular NestJS architecture, emphasizing separation between transport layers (DTOs), business logic, and data persistence.
+
+```text
+.
+├── .docker/                            # Docker configuration (MariaDB, health checks)
+├── prisma/                             # Prisma schema, migrations, and seed scripts
+├── src/
+│   ├── app/
+│   │   ├── common/                     # Shared decorators, filters, interceptors, and pipes
+│   │   ├── config/                     # Environment variable validation and configuration logic
+│   │   ├── <feature>/                  # Feature-based modules (Spells, Creatures, etc.)
+│   │   │   ├── dto/                    # Request / Response Data Transfer Objects (class-validator)
+│   │   │   ├── entities/               # Domain entities / models
+│   │   │   ├── controllers/
+│   │   │   ├── services/
+│   │   │   └── <feature>.module.ts
+│   │   └── app.module.ts               # Main application container
+│   └── main.ts                         # Entry point (Fastify setup, Swagger, HTTPS)
+├── .tool-versions                      # Mise runtime configurations
+└── package.json                        # Dependencies and scripts
+```
+
 ## Key Features
 
 - **SRD-Compliant Data:** A curated library of 5th Edition content, strictly adhering to the System Reference Document (SRD) for public consumption.
