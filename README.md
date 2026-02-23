@@ -14,11 +14,42 @@ The **D&D Mapp: API Gateway** is a high-performance, standalone REST API designe
 
 While built as a foundational component for the **D&D Mapp** platform, this service is architected to operate independently. This approach successfully decouples static rulebook data (SRD) from dynamic, player-specific campaign data, ensuring a clear separation of concerns and a focused data model.
 
+### System Architecture
+
+The following diagram illustrates how the API Gateway fits into the broader D&D Mapp ecosystem:
+
+```mermaid
+graph TD
+    subgraph Clients
+        AdminClient[Admin Portal - Angular]
+        WebClient[D&D Mapp - Angular]
+    end
+
+    subgraph Platform
+        Gateway[API Gateway - NestJS]
+        AuthServer[Auth Server]
+        DB[(MariaDB)]
+    end
+
+    %% Connections
+    AdminClient -- "Write/Read Access (JWT)" --> Gateway
+    WebClient -- "Read-Only Access (JWT)" --> Gateway
+    
+    Gateway -- "Verify JWT & Revocation Status" --> AuthServer
+    Gateway -- "SQL (Prisma)" --> DB
+    
+    %% Styling
+    style Gateway fill:#f96,stroke:#333,stroke-width:2px
+    style DB fill:#2D3748,color:#fff
+    style AuthServer fill:#e1f5fe,stroke:#01579b
+```
+
 ## Technical Stack
 
 - **Framework:** [NestJS](https://nestjs.com/) with the [Fastify](https://www.fastify.io/) adapter for high-throughput, low-latency request handling.
 - **Database:** [MariaDB](https://mariadb.org/) for robust relational data storage.
 - **ORM:** [Prisma](https://www.prisma.io/) to ensure end-to-end type safety and efficient schema management.
+- **Authentication:** JWT-based verification. The Gateway communicates with the **Auth Server** to validate tokens and ensure they have not been revoked.
 - **Validation & Transformation:**
     - [class-validator](https://github.com/typestack/class-validator) for declarative, decorator-based validation of DTOs and environment variables.
     - [class-transformer](https://github.com/typestack/class-transformer) for proper casting and serialization of plain objects into class instances.
