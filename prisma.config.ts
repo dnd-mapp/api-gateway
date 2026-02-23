@@ -3,6 +3,8 @@ import { defineConfig, env } from 'prisma/config';
 
 config({ path: '.env', ignore: ['MISSING_ENV_FILE'], quiet: true });
 
+const databaseUrl = env('DATABASE_URL');
+
 export default defineConfig({
     schema: 'prisma/schema.prisma',
     migrations: {
@@ -10,6 +12,7 @@ export default defineConfig({
         seed: './prisma/seeding/seed.sh',
     },
     datasource: {
-        url: env('DATABASE_URL'),
+        url: databaseUrl,
+        shadowDatabaseUrl: `${databaseUrl}_shadow`,
     },
 });
