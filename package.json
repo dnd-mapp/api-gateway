@@ -13,6 +13,7 @@
     "prisma:seed": "pnpm prisma db seed",
     "prisma:generate": "pnpm prisma generate",
     "docker:build": "docker build -f .docker/Dockerfile -t dnd-mapp/api-gateway:latest .",
+    "docker:bake": "docker buildx bake -f .docker/docker-bake.hcl app",
     "docker:compose:up": "docker compose -f .docker/compose.yaml up -d",
     "docker:compose:down": "docker compose -f .docker/compose.yaml down",
     "build": "pnpm nest build",
