@@ -13,3 +13,9 @@ export const EnvironmentVariableNames = {
     DB_PASS: 'DB_PASS',
     DB_NAME: 'DB_NAME',
 } as const;
+
+export const MAX_PORT = 65535;
+
+export const MIN_PORT_UNPRIVILEGED = 1024;
+
+export const MIN_PORT = 0;
