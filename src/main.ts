@@ -1,13 +1,14 @@
 import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { AppModule, configureSSL, parseInteger } from './app';
+import { ApplicationConfig, AppModule, ConfigNameSpaces, configureSSL, ServerConfig } from './app';
 
 async function main() {
     const { ssl, adapter } = await configureSSL();
     const app = await NestFactory.create(AppModule, adapter);
 
-    const host = process.env['HOST'] ?? 'localhost.api.dndmapp.dev';
-    const port = parseInteger(4550, process.env['PORT']);
+    const configService = app.get(ConfigService<ApplicationConfig, true>);
+    const { host, port } = configService.get<ServerConfig>(ConfigNameSpaces.SERVER);
 
     app.enableShutdownHooks();
 

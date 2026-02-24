@@ -1,4 +1,4 @@
-export function parseInteger(fallback: number, value?: string) {
+export function parseInteger(value: string | null, fallback: number) {
     if (!value) return fallback;
     const parsed = Number.parseInt(value, 10);
 
