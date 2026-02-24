@@ -9,5 +9,8 @@
         "webpackConfigPath": "webpack.config.cjs"
     },
     "collection": "@nestjs/schematics",
+    "generateOptions": {
+        "spec": false
+    },
     "sourceRoot": "src"
 }
