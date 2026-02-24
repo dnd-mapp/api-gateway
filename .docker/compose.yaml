@@ -1,7 +1,7 @@
 name: dnd-mapp
 services:
     api-gateway:
-        image: dnd-mapp/api-gateway:latest
+        image: dndmapp/api-gateway:latest
         container_name: api-gateway
         restart: unless-stopped
         depends_on:
