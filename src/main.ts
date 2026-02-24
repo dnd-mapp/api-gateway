@@ -1,10 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter } from '@nestjs/platform-fastify';
-import { AppModule, parseInteger } from './app';
+import { AppModule, configureSSL, parseInteger } from './app';
 
 async function main() {
-    const adapter = new FastifyAdapter();
-
+    const { ssl, adapter } = await configureSSL();
     const app = await NestFactory.create(AppModule, adapter);
 
     const host = process.env['HOST'] ?? 'localhost';
