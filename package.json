@@ -31,6 +31,7 @@
     "@prisma/adapter-mariadb": "~7.4",
     "@prisma/client": "~7.4",
     "fastify": "~5.7",
+    "prisma": "~7.4",
     "reflect-metadata": "~0.2",
     "rxjs": "~7.8"
   },
@@ -47,7 +48,6 @@
     "globals": "~17.3",
     "prettier": "~3.8",
     "prettier-plugin-organize-imports": "~4.3",
-    "prisma": "~7.4",
     "source-map-support": "~0.5",
     "ts-loader": "~9.5",
     "ts-node": "~10.9",
