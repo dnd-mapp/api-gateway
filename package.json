@@ -17,7 +17,7 @@
     "docker:compose:up": "docker compose -f .docker/compose.yaml up -d",
     "docker:compose:down": "docker compose -f .docker/compose.yaml down",
     "build": "pnpm nest build",
-    "start": "pnpm nest start",
+    "start": "pnpm nest start -w",
     "lint": "pnpm eslint .",
     "format:check": "pnpm prettier -l .",
     "format:write": "pnpm prettier -w ."
