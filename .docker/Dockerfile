@@ -28,6 +28,12 @@ ENV HOST="0.0.0.0"
 
 COPY --from=build /app/dist/api-gateway .
 
+COPY --from=build /app/generated/prisma ./generated/prisma
+
+COPY prisma.config.ts .
+
+COPY prisma prisma
+
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install
 
