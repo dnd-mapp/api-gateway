@@ -2,6 +2,9 @@ const { resolve } = require('path');
 const nodeExternals = require('webpack-node-externals');
 const GeneratePackageJsonWebpackPlugin = require('generate-package-json-webpack-plugin');
 const { readFileSync } = require('fs');
+const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+
+const isProductionModeEnabled = process.env['NODE_ENV'] === 'production';
 
 /**
  * @param configuration {import('webpack').Configuration}
@@ -16,16 +19,37 @@ module.exports = function (configuration) {
     delete packageManifest.packageManager;
     delete packageManifest.type;
 
+    const generatePackageJsonPlugin = new GeneratePackageJsonWebpackPlugin(packageManifest, {
+        useInstalledVersions: true,
+    });
+
     return {
-        ...configuration,
+        devtool: isProductionModeEnabled ? false : 'inline-source-map',
+        entry: resolve(__dirname, 'src/main.ts'),
         externals: [nodeExternals()],
         externalsPresets: {
             node: true,
         },
+        mode: isProductionModeEnabled ? 'production' : 'development',
+        module: {
+            rules: [...configuration.module.rules],
+        },
+        node: {
+            __dirname: false,
+            __filename: false,
+        },
+        optimization: {
+            nodeEnv: false,
+        },
         output: {
-            path: resolve(process.cwd(), 'dist/api-gateway'),
+            path: resolve(__dirname, 'dist/api-gateway'),
             filename: 'main.js',
         },
-        plugins: [new GeneratePackageJsonWebpackPlugin(packageManifest, { useInstalledVersions: true })],
+        target: 'node',
+        plugins: [...(isProductionModeEnabled ? [generatePackageJsonPlugin] : [undefined])],
+        resolve: {
+            extensions: ['.ts', '.js'],
+            plugins: [new TsConfigPathsPlugin({ configFile: resolve(__dirname, 'tsconfig.build.json') })],
+        },
     };
 };
