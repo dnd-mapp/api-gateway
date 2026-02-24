@@ -9,6 +9,7 @@ eslint.config.mjs
 
 node_modules/
 
+.docker/mariadb/
 dist/
 generated/prisma/
 
