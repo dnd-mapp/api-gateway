@@ -7,6 +7,12 @@
             "options": {
                 "tabWidth": 2
             }
+        },
+        {
+            "files": [".swcrc"],
+            "options": {
+                "parser": "json"
+            }
         }
     ],
     "plugins": ["prettier-plugin-organize-imports"],
