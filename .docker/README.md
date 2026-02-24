@@ -32,7 +32,7 @@ services:
             mariadb-server:
                 condition: service_healthy
         ports:
-            - "4450:4450"
+            - "4550:4550"
         env_file:
             - ./.env
 
@@ -69,7 +69,7 @@ secrets:
 docker compose up -d
 ```
 
-The API will be available at `https://localhost:4450/docs` (Swagger UI).
+The API will be available at `https://localhost:4550/docs` (Swagger UI).
 
 ## Configuration
 
@@ -87,11 +87,11 @@ The application is configured strictly via environment variables. The container 
 
 ### Server Settings
 
-| Variable        | Description                     | Default          |
-|-----------------|---------------------------------|------------------|
-| `PORT`          | Port the gateway listens on     | `4450`           |
-| `HOST`          | Binding address                 | `0.0.0.0`        |
-| `CORS_ORIGINS`  | Comma-separated allowed origins | `*`              |
+| Variable        | Description                     | Default   |
+|-----------------|---------------------------------|-----------|
+| `PORT`          | Port the gateway listens on     | `4550`    |
+| `HOST`          | Binding address                 | `0.0.0.0` |
+| `CORS_ORIGINS`  | Comma-separated allowed origins | `*`       |
 
 ---
 

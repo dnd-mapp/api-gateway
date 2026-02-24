@@ -262,7 +262,7 @@ The application is strictly configured via environment variables. Every variable
 | `DB_USER`       | Database username                 | Optional       | `root`                      |
 | `DATABASE_URL`  | Interpolated connection string    | Auto-generated | (Constructed)               |
 | `HOST`          | The hostname the gateway binds to | Optional       | `localhost.api.dndmapp.dev` |
-| `PORT`          | The port the gateway listens on   | Optional       | `4450`                      |
+| `PORT`          | The port the gateway listens on   | Optional       | `4550`                      |
 | `CORS_ORIGINS`  | Comma-separated allowed origins   | Optional       | `*`                         |
 
 ---

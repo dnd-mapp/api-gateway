@@ -7,7 +7,7 @@ async function main() {
     const app = await NestFactory.create(AppModule, adapter);
 
     const host = process.env['HOST'] ?? 'localhost.api.dndmapp.dev';
-    const port = parseInteger(3000, process.env['PORT']);
+    const port = parseInteger(4550, process.env['PORT']);
 
     app.enableShutdownHooks();
 

@@ -46,6 +46,6 @@ USER node
 
 COPY --from=package --chown=node:node /app .
 
-EXPOSE 4450
+EXPOSE 4550
 
 CMD ["node", "main.js"]
