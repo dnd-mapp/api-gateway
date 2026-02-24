@@ -5,7 +5,7 @@ async function main() {
     const { ssl, adapter } = await configureSSL();
     const app = await NestFactory.create(AppModule, adapter);
 
-    const host = process.env['HOST'] ?? 'localhost';
+    const host = process.env['HOST'] ?? 'localhost.api.dndmapp.dev';
     const port = parseInteger(3000, process.env['PORT']);
 
     app.enableShutdownHooks();
