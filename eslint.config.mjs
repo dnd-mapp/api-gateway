@@ -8,7 +8,7 @@ export default defineConfig(
     eslint.configs.recommended,
     tseslint.configs.recommendedTypeChecked,
     tseslint.configs.stylisticTypeChecked,
-    { ignores: ['node_modules/', 'dist/', 'eslint.config.mjs', 'generated/prisma/'] },
+    { ignores: ['node_modules/', 'dist/', 'eslint.config.mjs', 'generated/prisma/', 'webpack.config.cjs'] },
     {
         languageOptions: {
             globals: {
