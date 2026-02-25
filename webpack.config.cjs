@@ -52,7 +52,7 @@ module.exports = function () {
             filename: 'main.js',
         },
         target: 'node',
-        plugins: [...(isProductionModeEnabled ? [generatePackageJsonPlugin] : [undefined])],
+        plugins: [...(isProductionModeEnabled ? [generatePackageJsonPlugin] : [])],
         resolve: {
             extensions: ['.ts', '.js'],
             plugins: [new TsConfigPathsPlugin({ configFile: resolve(__dirname, 'tsconfig.build.json') })],
