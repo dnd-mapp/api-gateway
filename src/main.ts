@@ -7,6 +7,7 @@ import {
     AppModule,
     ConfigNameSpaces,
     configureCors,
+    configureGlobalValidation,
     configureHelmet,
     configureLogger,
     configureSSL,
@@ -27,6 +28,7 @@ async function main() {
     await configureHelmet(app);
     configureSwagger(app);
     configureLogger(app);
+    configureGlobalValidation(app);
 
     await app.listen(port, host, () => {
         const address = `${ssl ? 'https' : 'http'}://${host}:${port}`;
