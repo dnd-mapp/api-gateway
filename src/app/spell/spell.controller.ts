@@ -9,10 +9,11 @@ import {
     Param,
     Post,
     Put,
+    Query,
     Res,
 } from '@nestjs/common';
 import { type FastifyReply } from 'fastify';
-import { CreateSpellDto, UpdateSpellDto } from './dto';
+import { CreateSpellDto, SpellQueryParams, UpdateSpellDto } from './dto';
 import { SpellService } from './spell.service';
 
 @Controller('/spells')
@@ -24,8 +25,8 @@ export class SpellController {
     }
 
     @Get()
-    public async getAll() {
-        return await this.spellService.getAll();
+    public async getAll(@Query() queryParams: SpellQueryParams) {
+        return await this.spellService.getAll(queryParams);
     }
 
     @Post()

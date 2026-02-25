@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateSpellDto, UpdateSpellDto } from './dto';
+import { CreateSpellDto, SpellQueryParams, UpdateSpellDto } from './dto';
 import { SpellRepository } from './spell.repository';
 
 @Injectable()
@@ -10,8 +10,8 @@ export class SpellService {
         this.spellRepository = spellRepository;
     }
 
-    public async getAll() {
-        return await this.spellRepository.findAll();
+    public async getAll(queryParams: SpellQueryParams) {
+        return await this.spellRepository.findAll(queryParams);
     }
 
     public async getById(id: string) {

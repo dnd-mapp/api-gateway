@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class SpellDto {
     @IsNotEmpty()
@@ -9,4 +9,11 @@ export class SpellDto {
     @IsNotEmpty()
     @IsString()
     public name!: string;
+}
+
+export class SpellQueryParams {
+    @IsNotEmpty()
+    @IsString()
+    @IsOptional()
+    public name?: string;
 }

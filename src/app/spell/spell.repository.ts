@@ -1,7 +1,7 @@
 import { Spell as PrismaSpell } from '@dnd-mapp/api-gateway/prisma/client';
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../core';
-import { CreateSpellDto, UpdateSpellDto } from './dto';
+import { CreateSpellDto, SpellQueryParams, UpdateSpellDto } from './dto';
 import { SpellBuilder } from './spell.builder';
 
 export function spellDatabaseRecordToDto(record: PrismaSpell) {
@@ -20,8 +20,12 @@ export class SpellRepository {
         this.databaseService = databaseService;
     }
 
-    public async findAll() {
-        const results = await this.databaseService.prisma.spell.findMany();
+    public async findAll(queryParams: SpellQueryParams) {
+        const results = await this.databaseService.prisma.spell.findMany({
+            where: {
+                ...(queryParams.name ? { name: { contains: queryParams.name } } : {}),
+            },
+        });
         return spellDatabaseRecordsToDto(results);
     }
 
