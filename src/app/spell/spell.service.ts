@@ -46,8 +46,8 @@ export class SpellService {
     }
 
     private async isNameTaken(name: string, id?: string) {
-        const result = await this.getByName(name);
-        return result !== null && (!id || result.id !== id);
+        const queryResult = await this.getByName(name);
+        return queryResult !== null && (!id || queryResult.id !== id);
     }
 
     private async doesSpellExist(id: string) {
