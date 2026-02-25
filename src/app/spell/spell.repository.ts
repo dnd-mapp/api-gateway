@@ -25,6 +25,15 @@ export class SpellRepository {
         return spellDatabaseRecordsToDto(results);
     }
 
+    public async findOneById(id: string) {
+        const result = await this.databaseService.prisma.spell.findUnique({
+            where: { id: id },
+        });
+
+        if (!result) return null;
+        return spellDatabaseRecordToDto(result);
+    }
+
     public async findOneByName(name: string) {
         const result = await this.databaseService.prisma.spell.findUnique({
             where: { name: name },

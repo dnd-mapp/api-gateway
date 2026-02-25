@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
 import { type FastifyReply } from 'fastify';
 import { CreateSpellDto } from './dto';
 import { SpellService } from './spell.service';
@@ -23,6 +23,14 @@ export class SpellController {
 
         response.status(HttpStatus.CREATED).headers({ location: `${url}/${result.id}` });
 
+        return result;
+    }
+
+    @Get('/:id')
+    public async getById(@Param('id') id: string) {
+        const result = await this.spellService.getById(id);
+
+        if (!result) throw new NotFoundException(`Spell with ID "${id}" was not found`);
         return result;
     }
 }
