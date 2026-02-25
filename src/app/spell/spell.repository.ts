@@ -65,4 +65,8 @@ export class SpellRepository {
         });
         return spellDatabaseRecordToDto(result);
     }
+
+    public async removeOneById(id: string) {
+        await this.databaseService.prisma.spell.delete({ where: { id: id } });
+    }
 }

@@ -41,6 +41,13 @@ export class SpellService {
         return await this.spellRepository.updateOneById(id, data);
     }
 
+    public async remove(id: string) {
+        if (!(await this.doesSpellExist(id))) {
+            throw new NotFoundException(`Could not remove Spell by id "${id}". - Reason: Spell does not exist`);
+        }
+        await this.spellRepository.removeOneById(id);
+    }
+
     private async getByName(name: string) {
         return await this.spellRepository.findOneByName(name);
     }

@@ -1,4 +1,16 @@
-import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Put, Res } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    NotFoundException,
+    Param,
+    Post,
+    Put,
+    Res,
+} from '@nestjs/common';
 import { type FastifyReply } from 'fastify';
 import { CreateSpellDto, UpdateSpellDto } from './dto';
 import { SpellService } from './spell.service';
@@ -37,5 +49,11 @@ export class SpellController {
     @Put('/:id')
     public async update(@Param('id') id: string, @Body() data: UpdateSpellDto) {
         return await this.spellService.update(id, data);
+    }
+
+    @Delete('/:id')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    public async delete(@Param('id') id: string) {
+        await this.spellService.remove(id);
     }
 }
