@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateSpellDto, SpellQueryParams, UpdateSpellDto } from './dto';
 import { SpellRepository } from './spell.repository';
 
 @Injectable()
 export class SpellService {
+    private readonly logger = new Logger(SpellService.name);
     private readonly spellRepository: SpellRepository;
 
     constructor(spellRepository: SpellRepository) {
@@ -22,20 +23,23 @@ export class SpellService {
         const { name } = data;
 
         if (await this.isNameTaken(name)) {
-            throw new BadRequestException(`Could not create Spell. - Reason: Name "${name}" is already in use.`);
+            this.logger.error(`Create failed: Spell with name "${name}" already exists`);
+            throw new BadRequestException(`Could not create Spell. - Reason: Name "${name}" is already in use`);
         }
         return await this.spellRepository.createOne(data);
     }
 
     public async update(id: string, data: UpdateSpellDto) {
         if (!(await this.doesSpellExist(id))) {
-            throw new NotFoundException(`Could not update Spell with ID "${id}". - Reason: Spell was not found.`);
+            this.logger.warn(`Update failed: Spell with ID "${id}" was not found`);
+            throw new NotFoundException(`Could not update Spell with ID "${id}". - Reason: Spell was not found`);
         }
         const { name } = data;
 
         if (await this.isNameTaken(name, id)) {
+            this.logger.error(`Update failed: New name "${name}" already taken by another Spell`);
             throw new BadRequestException(
-                `Could not update Spell with ID "${id}" - Reason: Name "${name}" is already in use.`,
+                `Could not update Spell with ID "${id}" - Reason: Name "${name}" is already in use`,
             );
         }
         return await this.spellRepository.updateOneById(id, data);
@@ -43,6 +47,7 @@ export class SpellService {
 
     public async remove(id: string) {
         if (!(await this.doesSpellExist(id))) {
+            this.logger.warn(`Removal failed: Spell with ID "${id}" does not exist`);
             throw new NotFoundException(`Could not remove Spell by id "${id}". - Reason: Spell does not exist`);
         }
         await this.spellRepository.removeOneById(id);
