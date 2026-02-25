@@ -8,6 +8,7 @@ import {
     ConfigNameSpaces,
     configureCors,
     configureHelmet,
+    configureLogger,
     configureSSL,
     configureSwagger,
     ServerConfig,
@@ -25,6 +26,7 @@ async function main() {
     configureCors(app);
     await configureHelmet(app);
     configureSwagger(app);
+    configureLogger(app);
 
     await app.listen(port, host, () => {
         const address = `${ssl ? 'https' : 'http'}://${host}:${port}`;
