@@ -1,4 +1,4 @@
-import { SpellDto } from './spell.dto';
+import { SpellDto } from './dto';
 
 export class SpellBuilder {
     private readonly spell = new SpellDto();
