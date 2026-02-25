@@ -21,6 +21,9 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "outDir": "dist/api-gateway",
+        "paths": {
+            "@dnd-mapp/api-gateway/prisma/*": ["./generated/prisma/*"]
+        },
         "skipDefaultLibCheck": true,
         "skipLibCheck": true,
         "strictBindCallApply": true,
