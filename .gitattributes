@@ -1,23 +1,70 @@
+# ----------------------------------------------------------------
+# Global settings
+# ----------------------------------------------------------------
 # Handle line endings automatically for files detected as text
-# and leave binary files untouched.
-*               text=auto
+# and ensure that text files are LF on checkout.
+*               text=auto eol=lf
 
-# Ensure standard text files use LF (crucial for Docker/Linux environments)
-*.ts            text eol=lf
-*.js            text eol=lf
-*.json          text eol=lf
-*.md            text eol=lf
+# ----------------------------------------------------------------
+# JavaScript / TypeScript / Build Tools
+# ----------------------------------------------------------------
+*.js            text diff=javascript
+*.cjs           text diff=javascript
+*.mjs           text diff=javascript
+*.ts            text diff=typescript
+*.cts           text diff=typescript
+*.mts           text diff=typescript
+*.json          text
 
-# Docker & Shell scripts MUST use LF to run correctly in containers
-Dockerfile      text eol=lf
-.dockerignore   text eol=lf
+# Ensure pnpm lockfile is treated as a binary or handled specially to avoid merge conflicts
+pnpm-lock.yaml  binary
+
+# ----------------------------------------------------------------
+# Prisma & Database
+# ----------------------------------------------------------------
+*.prisma        text
+*.sql           text
+
+# ----------------------------------------------------------------
+# Config files
+# ----------------------------------------------------------------
+*.yaml          text
+*.yml           text
+*.config.js     text
+*.config.ts     text
+.prettierignore text
+.prettierrc     text
+.editorconfig   text
+.swcrc          text
+.tool-versions  text
+*.env           text
+*.env.*         text
+
+# ----------------------------------------------------------------
+# Docker & Shell
+# ----------------------------------------------------------------
+**/Dockerfile   text
+*.hcl           text
+.dockerignore   text
 *.sh            text eol=lf
 
-# pnpm lockfile
-pnpm-lock.yaml  text eol=lf
+# ----------------------------------------------------------------
+# Linguist Overrides (GitHub Statistics)
+# ----------------------------------------------------------------
+# Treat generated Prisma files or Webpack bundles as vendor/generated
+# to keep them out of your language statistics.
+**/generated/** linguist-generated
+**/dist/**      linguist-generated
+pnpm-lock.yaml  linguist-generated
 
+# ----------------------------------------------------------------
+# Binary Files
+# ----------------------------------------------------------------
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.ico           binary
 *.pdf           binary
-
-# GitHub Linguist Overrides
-# Mark generated files or lockfiles to keep PR diffs clean
-pnpm-lock.yaml  linguist-generated=true
+*.woff          binary
+*.woff2         binary
