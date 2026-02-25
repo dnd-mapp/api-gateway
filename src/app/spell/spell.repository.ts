@@ -23,6 +23,8 @@ export class SpellRepository {
 
     public async findAll(queryParams: SpellQueryParams) {
         const limit = queryParams.limit!;
+        const offset = (queryParams.page! - 1) * limit;
+
         const totalCount = await this.databaseService.prisma.spell.count({
             where: {
                 ...(queryParams.name ? { name: { contains: queryParams.name } } : {}),
@@ -31,10 +33,12 @@ export class SpellRepository {
         const results = await this.databaseService.prisma.spell.findMany({
             ...(queryParams.order ? { orderBy: { name: queryParams.order } } : {}),
             take: limit,
+            skip: offset,
             where: {
                 ...(queryParams.name ? { name: { contains: queryParams.name } } : {}),
             },
         });
+
         const spells = spellDatabaseRecordsToDto(results);
         const paginatedResponse = new PaginatedResponseDto();
 
@@ -42,7 +46,7 @@ export class SpellRepository {
         paginatedResponse.totalCount = totalCount;
         paginatedResponse.limit = limit;
         paginatedResponse.totalPages = Math.ceil(totalCount / limit);
-        paginatedResponse.page = 1;
+        paginatedResponse.page = queryParams.page!;
 
         return paginatedResponse;
     }
