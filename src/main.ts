@@ -1,16 +1,19 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { ApplicationConfig, AppModule, ConfigNameSpaces, configureSSL, ServerConfig } from './app';
+import { NestFastifyApplication } from '@nestjs/platform-fastify';
+import { ApplicationConfig, AppModule, ConfigNameSpaces, configureCors, configureSSL, ServerConfig } from './app';
 
 async function main() {
     const { ssl, adapter } = await configureSSL();
-    const app = await NestFactory.create(AppModule, adapter);
+    const app = await NestFactory.create<NestFastifyApplication>(AppModule, adapter);
 
     const configService = app.get(ConfigService<ApplicationConfig, true>);
     const { host, port } = configService.get<ServerConfig>(ConfigNameSpaces.SERVER);
 
     app.enableShutdownHooks();
+
+    configureCors(app);
 
     await app.listen(port, host, () => {
         const address = `${ssl ? 'https' : 'http'}://${host}:${port}`;
