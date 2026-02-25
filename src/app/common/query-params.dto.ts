@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNumber, IsOptional, Min } from 'class-validator';
 
 export const DEFAULT_LIMIT = 20;
@@ -21,5 +22,6 @@ export class QueryParamsDto {
 
     @IsEnum(SortOrders)
     @IsOptional()
+    @ApiProperty({ enum: Object.values(SortOrders) })
     public order?: SortOrder = DEFAULT_SORT_ORDER;
 }
