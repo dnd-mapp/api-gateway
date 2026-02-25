@@ -29,11 +29,12 @@ export class SpellController {
     }
 
     @Post()
+    @HttpCode(HttpStatus.CREATED)
     public async create(@Body() data: CreateSpellDto, @Res({ passthrough: true }) response: FastifyReply) {
         const result = await this.spellService.create(data);
         const url = response.request.url;
 
-        response.status(HttpStatus.CREATED).headers({ location: `${url}/${result.id}` });
+        response.headers({ location: `${url}/${result.id}` });
 
         return result;
     }
