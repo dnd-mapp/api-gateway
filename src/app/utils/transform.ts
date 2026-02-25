@@ -1,15 +1,15 @@
 import { ClassConstructor, ClassTransformOptions, plainToInstance } from 'class-transformer';
 
-export const defaultOptions: ClassTransformOptions = {
+export const defaultTransformOptions: ClassTransformOptions = {
     enableCircularCheck: true,
     enableImplicitConversion: true,
     exposeDefaultValues: true,
 };
 
-export function transform<T>(ctor: ClassConstructor<T>, value: unknown, options = defaultOptions): T {
+export function transform<T>(ctor: ClassConstructor<T>, value: unknown, options = defaultTransformOptions): T {
     return plainToInstance(ctor, value, options);
 }
 
-export function transformAll<T>(ctor: ClassConstructor<T>, value: unknown[], options = defaultOptions): T[] {
+export function transformAll<T>(ctor: ClassConstructor<T>, value: unknown[], options = defaultTransformOptions): T[] {
     return plainToInstance(ctor, value, options);
 }
