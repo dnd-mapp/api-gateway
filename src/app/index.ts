@@ -1,2 +1,2 @@
 export * from './app.module';
-export * from './core/config';
+export * from './core';
