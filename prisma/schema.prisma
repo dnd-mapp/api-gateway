@@ -8,3 +8,10 @@ generator client {
 datasource db {
     provider = "mysql"
 }
+
+model Spell {
+    id   String @id @default(nanoid())
+    name String @unique(map: "uq_spell_name")
+
+    @@map(name: "spells")
+}
