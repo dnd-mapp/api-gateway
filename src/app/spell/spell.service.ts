@@ -24,7 +24,7 @@ export class SpellService {
         if (await this.isNameTaken(name)) {
             throw new BadRequestException(`Could not create Spell. - Reason: Name "${name}" is already in use.`);
         }
-        return await this.spellRepository.create(data);
+        return await this.spellRepository.createOne(data);
     }
 
     public async update(id: string, data: UpdateSpellDto) {
@@ -38,7 +38,7 @@ export class SpellService {
                 `Could not update Spell with ID "${id}" - Reason: Name "${name}" is already in use.`,
             );
         }
-        return await this.spellRepository.update(id, data);
+        return await this.spellRepository.updateOneById(id, data);
     }
 
     private async getByName(name: string) {

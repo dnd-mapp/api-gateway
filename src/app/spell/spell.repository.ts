@@ -43,7 +43,7 @@ export class SpellRepository {
         return spellDatabaseRecordToDto(result);
     }
 
-    public async create(data: CreateSpellDto) {
+    public async createOne(data: CreateSpellDto) {
         const { name } = data;
 
         const result = await this.databaseService.prisma.spell.create({
@@ -54,7 +54,7 @@ export class SpellRepository {
         return spellDatabaseRecordToDto(result);
     }
 
-    public async update(id: string, data: UpdateSpellDto) {
+    public async updateOneById(id: string, data: UpdateSpellDto) {
         const { name } = data;
 
         const result = await this.databaseService.prisma.spell.update({
