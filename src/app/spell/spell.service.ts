@@ -1,5 +1,5 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateSpellDto } from './dto';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { CreateSpellDto, UpdateSpellDto } from './dto';
 import { SpellRepository } from './spell.repository';
 
 @Injectable()
@@ -27,12 +27,31 @@ export class SpellService {
         return await this.spellRepository.create(data);
     }
 
+    public async update(id: string, data: UpdateSpellDto) {
+        if (!(await this.doesSpellExist(id))) {
+            throw new NotFoundException(`Could not update Spell with ID "${id}". - Reason: Spell was not found.`);
+        }
+        const { name } = data;
+
+        if (await this.isNameTaken(name, id)) {
+            throw new BadRequestException(
+                `Could not update Spell with ID "${id}" - Reason: Name "${name}" is already in use.`,
+            );
+        }
+        return await this.spellRepository.update(id, data);
+    }
+
     private async getByName(name: string) {
         return await this.spellRepository.findOneByName(name);
     }
 
-    private async isNameTaken(name: string) {
+    private async isNameTaken(name: string, id?: string) {
         const result = await this.getByName(name);
-        return result !== null;
+        return result !== null && (!id || result.id !== id);
+    }
+
+    private async doesSpellExist(id: string) {
+        const queryResult = await this.getById(id);
+        return queryResult !== null;
     }
 }

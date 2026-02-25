@@ -1,7 +1,7 @@
 import { Spell as PrismaSpell } from '@dnd-mapp/api-gateway/prisma/client';
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../core';
-import { CreateSpellDto } from './dto';
+import { CreateSpellDto, UpdateSpellDto } from './dto';
 import { SpellBuilder } from './spell.builder';
 
 export function spellDatabaseRecordToDto(record: PrismaSpell) {
@@ -47,6 +47,18 @@ export class SpellRepository {
         const { name } = data;
 
         const result = await this.databaseService.prisma.spell.create({
+            data: {
+                name: name,
+            },
+        });
+        return spellDatabaseRecordToDto(result);
+    }
+
+    public async update(id: string, data: UpdateSpellDto) {
+        const { name } = data;
+
+        const result = await this.databaseService.prisma.spell.update({
+            where: { id: id },
             data: {
                 name: name,
             },

@@ -1,6 +1,6 @@
-import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Put, Res } from '@nestjs/common';
 import { type FastifyReply } from 'fastify';
-import { CreateSpellDto } from './dto';
+import { CreateSpellDto, UpdateSpellDto } from './dto';
 import { SpellService } from './spell.service';
 
 @Controller('/spells')
@@ -32,5 +32,10 @@ export class SpellController {
 
         if (!result) throw new NotFoundException(`Spell with ID "${id}" was not found`);
         return result;
+    }
+
+    @Put('/:id')
+    public async update(@Param('id') id: string, @Body() data: UpdateSpellDto) {
+        return await this.spellService.update(id, data);
     }
 }
