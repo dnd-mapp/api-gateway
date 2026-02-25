@@ -12,8 +12,8 @@ export const DEFAULT_DB_SCHEMA = 'dma_api_dev';
 export const DEFAULT_DB_USER = 'root';
 
 export const databaseConfig = registerAs<DatabaseConfig>(ConfigNameSpaces.DATABASE, () => ({
-    host: readFromEnv(EnvironmentVariableNames.HOST) ?? DEFAULT_DB_HOST,
-    port: parseInteger(readFromEnv(EnvironmentVariableNames.PORT), DEFAULT_DB_PORT),
+    host: readFromEnv(EnvironmentVariableNames.DB_HOST) ?? DEFAULT_DB_HOST,
+    port: parseInteger(readFromEnv(EnvironmentVariableNames.DB_PORT), DEFAULT_DB_PORT),
     user: readFromEnv(EnvironmentVariableNames.DB_USER) ?? DEFAULT_DB_USER,
     password: readFromEnv(EnvironmentVariableNames.DB_PASS)!,
     schema: readFromEnv(EnvironmentVariableNames.DB_NAME) ?? DEFAULT_DB_SCHEMA,
