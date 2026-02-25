@@ -6,6 +6,14 @@
             "type": "webpack"
         },
         "deleteOutDir": true,
+        "plugins": [
+            {
+                "name": "@nestjs/swagger",
+                "options": {
+                    "introspectComments": true
+                }
+            }
+        ],
         "webpackConfigPath": "webpack.config.cjs"
     },
     "collection": "@nestjs/schematics",

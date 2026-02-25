@@ -13,7 +13,6 @@
 !*.sh
 
 !.prettierrc
-!.swcrc
 
 .idea/
 .run/

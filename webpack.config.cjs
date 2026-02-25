@@ -7,9 +7,10 @@ const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const isProductionModeEnabled = process.env['NODE_ENV'] === 'production';
 
 /**
+ * @param configuration {import('webpack').Configuration}
  * @returns {import('webpack').Configuration}
  */
-module.exports = function () {
+module.exports = function (configuration) {
     const packageManifest = JSON.parse(readFileSync('package.json', { encoding: 'utf8' }));
 
     delete packageManifest.dependencies;
@@ -29,17 +30,7 @@ module.exports = function () {
             node: true,
         },
         mode: isProductionModeEnabled ? 'production' : 'development',
-        module: {
-            rules: [
-                {
-                    test: /\.ts$/,
-                    exclude: /node_modules/,
-                    use: {
-                        loader: 'swc-loader',
-                    },
-                },
-            ],
-        },
+        module: configuration.module,
         node: {
             __dirname: false,
             __filename: false,

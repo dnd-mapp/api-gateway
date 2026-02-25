@@ -35,7 +35,6 @@ pnpm-lock.yaml  binary
 .prettierignore text
 .prettierrc     text
 .editorconfig   text
-.swcrc          text
 .tool-versions  text
 *.env           text
 *.env.*         text
