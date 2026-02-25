@@ -7,11 +7,11 @@
   "author": "NoNamer777",
   "scripts": {
     "gen:ssl-cert": "mkcert -key-file ssl-key.pem -cert-file ssl-cert.pem localhost.api.dndmapp.dev localhost 127.0.0.1",
+    "gen:prisma-client": "pnpm prisma generate",
     "prisma:migrate-deploy": "pnpm prisma migrate deploy",
     "prisma:migrate-reset": "pnpm prisma migrate reset",
     "prisma:migrate-dev": "pnpm prisma migrate dev",
     "prisma:seed": "pnpm prisma db seed",
-    "prisma:generate": "pnpm prisma generate",
     "docker:build": "docker build -f .docker/Dockerfile -t dnd-mapp/api-gateway:latest .",
     "docker:bake": "docker buildx bake -f .docker/docker-bake.hcl app",
     "docker:compose:up": "docker compose -f .docker/compose.yaml up -d",
