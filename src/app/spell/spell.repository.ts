@@ -23,6 +23,7 @@ export class SpellRepository {
     public async findAll(queryParams: SpellQueryParams) {
         const results = await this.databaseService.prisma.spell.findMany({
             ...(queryParams.limit ? { take: queryParams.limit } : {}),
+            ...(queryParams.order ? { orderBy: { name: queryParams.order } } : {}),
             where: {
                 ...(queryParams.name ? { name: { contains: queryParams.name } } : {}),
             },
