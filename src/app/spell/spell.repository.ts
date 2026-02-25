@@ -1,5 +1,6 @@
 import { Spell as PrismaSpell } from '@dnd-mapp/api-gateway/prisma/client';
 import { Injectable } from '@nestjs/common';
+import { PaginatedResponseDto } from '../common';
 import { DatabaseService } from '../core';
 import { CreateSpellDto, SpellQueryParams, UpdateSpellDto } from './dto';
 import { SpellBuilder } from './spell.builder';
@@ -21,14 +22,29 @@ export class SpellRepository {
     }
 
     public async findAll(queryParams: SpellQueryParams) {
-        const results = await this.databaseService.prisma.spell.findMany({
-            ...(queryParams.limit ? { take: queryParams.limit } : {}),
-            ...(queryParams.order ? { orderBy: { name: queryParams.order } } : {}),
+        const limit = queryParams.limit!;
+        const totalCount = await this.databaseService.prisma.spell.count({
             where: {
                 ...(queryParams.name ? { name: { contains: queryParams.name } } : {}),
             },
         });
-        return spellDatabaseRecordsToDto(results);
+        const results = await this.databaseService.prisma.spell.findMany({
+            ...(queryParams.order ? { orderBy: { name: queryParams.order } } : {}),
+            take: limit,
+            where: {
+                ...(queryParams.name ? { name: { contains: queryParams.name } } : {}),
+            },
+        });
+        const spells = spellDatabaseRecordsToDto(results);
+        const paginatedResponse = new PaginatedResponseDto();
+
+        paginatedResponse.data = spells;
+        paginatedResponse.totalCount = totalCount;
+        paginatedResponse.limit = limit;
+        paginatedResponse.totalPages = Math.ceil(totalCount / limit);
+        paginatedResponse.page = 1;
+
+        return paginatedResponse;
     }
 
     public async findOneById(id: string) {
