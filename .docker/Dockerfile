@@ -17,7 +17,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 
 COPY . .
 
-RUN pnpm prisma:generate && \
+RUN pnpm gen:prisma-client && \
     pnpm build
 
 
