@@ -6,6 +6,10 @@ runs:
         - name: Set up tools
           uses: ./.github/actions/setup-tools
 
+        - name: Generate Prisma client
+          shell: bash
+          uses: pnpm gen:prisma-client
+
         - name: Check formatting
           shell: bash
           run: pnpm format:check
