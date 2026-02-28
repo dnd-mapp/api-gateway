@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM node:24.13.1 AS base
+FROM --platform=$BUILDPLATFORM node:24.14.0 AS base
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -38,7 +38,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install
 
 
-FROM node:24.13.1-alpine3.23
+FROM node:24.14.0-alpine3.23
 
 WORKDIR /app
 
