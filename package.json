@@ -24,6 +24,7 @@
   },
   "packageManager": "pnpm@10.30.3",
   "dependencies": {
+    "@dnd-mapp/shared-utils": "~1.1",
     "@fastify/helmet": "~13.0",
     "@fastify/static": "~9.0",
     "@nestjs/common": "~11.1",
