@@ -1,3 +1,4 @@
+import { tryCatchSync } from '@dnd-mapp/shared-utils';
 import {
     registerDecorator,
     ValidationArguments,
@@ -5,7 +6,6 @@ import {
     ValidatorConstraint,
     ValidatorConstraintInterface,
 } from 'class-validator';
-import { tryCatchSync } from '../try-catch';
 
 @ValidatorConstraint({
     name: 'isCorsOrigin',
