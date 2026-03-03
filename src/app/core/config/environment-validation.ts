@@ -1,6 +1,7 @@
+import { fromStringToArray, isArrayEmpty } from '@dnd-mapp/shared-utils';
 import { Transform } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsNumber, IsString, Max, Min, validate } from 'class-validator';
-import { fromStringToArray, isArrayEmpty, IsCorsOrigin, IsHost, transform } from '../../utils';
+import { IsCorsOrigin, IsHost, transform } from '../../utils';
 import { EnvironmentVariableNames, MAX_PORT, MIN_PORT, MIN_PORT_UNPRIVILEGED } from './constants';
 import { DEFAULT_DB_HOST, DEFAULT_DB_SCHEMA, DEFAULT_DB_USER } from './database.config';
 import { DEFAULT_CORS_ORIGINS, DEFAULT_SERVER_HOST, DEFAULT_SERVER_PORT } from './server.config';

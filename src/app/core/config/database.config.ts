@@ -1,5 +1,6 @@
+import { parseInteger } from '@dnd-mapp/shared-utils';
 import { registerAs } from '@nestjs/config';
-import { parseInteger, readFromEnv } from '../../utils';
+import { readFromEnv } from '../../utils';
 import { ConfigNameSpaces, EnvironmentVariableNames } from './constants';
 import { DatabaseConfig } from './types';
 
